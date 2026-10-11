@@ -1,26 +1,97 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  Bierman Family Portal theme.
+  Values come from the Figma mockups (page "Mockups v4").
+
+  Color rules:
+  - Aqua, pink, green, and sun are for fills and decoration only.
+  - For text and buttons use the darker "-text" and "pink-button" tokens,
+    which pass WCAG 2.2 AA contrast (4.5:1) on white.
+*/
+@theme {
+  /* Brand */
+  --color-navy: #004c97;
+  --color-navy-tint: #e5eef7;
+  --color-aqua: #05c3de;
+  --color-aqua-tint: #e6f9fc;
+  --color-aqua-text: #00788a;
+  --color-pink: #ef4e72;
+  --color-pink-button: #d63458;
+  --color-pink-tint: #fdecf0;
+  --color-green: #61ce70;
+  --color-green-tint: #eaf8ec;
+  --color-green-text: #1e7b2e;
+  --color-sun: #ffc845;
+  --color-sun-tint: #fff6dc;
+  --color-sun-text: #5a3d00;
+
+  /* Neutrals */
+  --color-ink: #313133;
+  --color-muted: #5e6269;
+  --color-line: #e3e8ee;
+  --color-page: #f4f9fb;
+  --color-gray-tint: #eef0f2;
+
+  /* Status */
+  --color-danger: #b42318;
+  --color-danger-tint: #fdecea;
+
+  /* Type */
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+
+  --text-h1: 34px;
+  --text-h1--line-height: 42px;
+  --text-h1--font-weight: 700;
+  --text-h2: 20px;
+  --text-h2--line-height: 28px;
+  --text-h2--font-weight: 700;
+  --text-h3: 16px;
+  --text-h3--line-height: 24px;
+  --text-h3--font-weight: 600;
+  --text-body: 15px;
+  --text-body--line-height: 24px;
+  --text-small: 13px;
+  --text-small--line-height: 20px;
+  --text-tiny: 12px;
+  --text-tiny--line-height: 16px;
+
+  /* Shape */
+  --radius-card: 24px;
+  --radius-row: 20px;
+  --radius-mark: 12px;
+
+  /* Depth */
+  --shadow-tab: 0 1px 3px rgb(0 40 80 / 0.12);
+
+  /* Layout */
+  --container-page: 1440px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply bg-page font-sans text-body text-ink antialiased;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* One visible focus style everywhere (WCAG 2.4.7 and 2.4.11). */
+  :focus-visible {
+    outline: 3px solid var(--color-navy);
+    outline-offset: 2px;
+  }
+
+  /* Keep focused elements clear of the sticky header (WCAG 2.4.11). */
+  html {
+    scroll-padding-top: 88px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
