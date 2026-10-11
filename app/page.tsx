@@ -1,69 +1,73 @@
-import Image from "next/image";
+// Temporary theme preview. Replaced by the real home page in #30.
+const swatches = [
+  ["navy", "bg-navy"],
+  ["navy-tint", "bg-navy-tint"],
+  ["aqua", "bg-aqua"],
+  ["aqua-tint", "bg-aqua-tint"],
+  ["pink", "bg-pink"],
+  ["pink-button", "bg-pink-button"],
+  ["pink-tint", "bg-pink-tint"],
+  ["green", "bg-green"],
+  ["green-tint", "bg-green-tint"],
+  ["sun", "bg-sun"],
+  ["sun-tint", "bg-sun-tint"],
+  ["line", "bg-line"],
+  ["page", "bg-page"],
+  ["danger", "bg-danger"],
+] as const;
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="mx-auto w-full max-w-page px-6 py-10 md:px-12">
+      <h1 className="text-h1 text-navy">Bierman theme preview</h1>
+      <p className="mt-2 text-body text-muted">
+        Check these against the Figma mockups. This page goes away in #30.
+      </p>
+
+      <section className="mt-8 rounded-card border border-line bg-white p-7">
+        <h2 className="text-h2 text-navy">Type</h2>
+        <p className="mt-4 text-h1 text-navy">Heading 1, 34/42 bold</p>
+        <p className="mt-2 text-h2 text-navy">Heading 2, 20/28 bold</p>
+        <p className="mt-2 text-h3 text-ink">Heading 3, 16/24 semibold</p>
+        <p className="mt-2 text-body text-ink">Body, 15/24 regular</p>
+        <p className="mt-2 text-small text-muted">Small, 13/20 muted</p>
+      </section>
+
+      <section className="mt-6 rounded-card border border-line bg-white p-7">
+        <h2 className="text-h2 text-navy">Buttons and badges</h2>
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <button className="rounded-full bg-pink-button px-6 py-3 text-body font-bold text-white">
+            Book parent training
+          </button>
+          <button className="rounded-full bg-navy px-6 py-3 text-body font-bold text-white">
+            Navy button
+          </button>
+          <button className="rounded-full border-2 border-navy bg-white px-6 py-3 text-body font-bold text-navy">
+            Outline button
+          </button>
+          <span className="rounded-full bg-navy-tint px-3 py-1 text-tiny font-semibold text-navy">
+            Scheduled by your care team
+          </span>
+          <span className="rounded-full bg-green-tint px-3 py-1 text-tiny font-semibold text-green-text">
+            Booked by you
+          </span>
+          <span className="rounded-full bg-sun px-3 py-1 text-tiny font-bold text-sun-text">
+            Coming soon
+          </span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="mt-6 rounded-card border border-line bg-white p-7">
+        <h2 className="text-h2 text-navy">Colors</h2>
+        <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
+          {swatches.map(([name, cls]) => (
+            <li key={name} className="text-small text-muted">
+              <div className={`h-14 rounded-mark border border-line ${cls}`} />
+              <span className="mt-1 block">{name}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </main>
   );
 }
