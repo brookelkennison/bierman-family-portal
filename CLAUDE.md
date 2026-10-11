@@ -22,6 +22,8 @@ pnpm dev · pnpm check (lint, typecheck, format check) · pnpm format
 
 pnpm db:push (apply migrations to the hosted project) · pnpm db:types (regenerate lib/database.types.ts after a migration)
 
+pnpm test:db (pgTAP tests in supabase/tests; runs in CI against a throwaway database, needs Docker locally)
+
 Run pnpm check before every push.
 
 ## How to work with me
