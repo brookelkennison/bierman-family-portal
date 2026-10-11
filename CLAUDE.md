@@ -20,6 +20,8 @@ Scope: create and read appointments, run locally. Update and delete show as Comi
 
 pnpm dev · pnpm check (lint, typecheck, format check) · pnpm format
 
+pnpm db:push (apply migrations to the hosted project) · pnpm db:types (regenerate lib/database.types.ts after a migration)
+
 Run pnpm check before every push.
 
 ## How to work with me
