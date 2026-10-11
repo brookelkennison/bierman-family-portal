@@ -12,7 +12,8 @@
     "format:check": "prettier --check .",
     "check": "pnpm lint && pnpm typecheck && pnpm format:check",
     "db:push": "supabase db push",
-    "db:types": "supabase gen types typescript --linked > lib/database.types.ts"
+    "db:types": "supabase gen types typescript --linked > lib/database.types.ts",
+    "test:db": "supabase test db"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

@@ -12,3 +12,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+      - name: Start a throwaway database
+        run: pnpm supabase db start
+      - name: Database tests
+        run: pnpm test:db

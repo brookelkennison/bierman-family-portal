@@ -446,7 +446,7 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      my_patient_ids: { Args: never; Returns: string[] };
     };
     Enums: {
       appointment_status: "scheduled" | "completed" | "cancelled";
