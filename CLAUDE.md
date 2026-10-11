@@ -18,7 +18,9 @@ Scope: create and read appointments, run locally. Update and delete show as Comi
 
 ## Commands
 
-pnpm dev · pnpm lint · pnpm typecheck · pnpm format
+pnpm dev · pnpm check (lint, typecheck, format check) · pnpm format
+
+Run pnpm check before every push.
 
 ## How to work with me
 
