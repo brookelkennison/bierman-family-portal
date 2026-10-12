@@ -35,7 +35,7 @@ export function DayRow({ legend, name, days, value, onChange }: DayRowProps) {
       <legend className="sr-only">{legend}</legend>
       <div className="grid grid-cols-5 gap-2 sm:flex sm:gap-2.5">
         {days.map((d) => (
-          <label key={d.value} className="relative sm:w-17">
+          <label key={d.value} className="group relative sm:w-17">
             <input
               type="radio"
               name={name}
@@ -64,7 +64,11 @@ export function DayRow({ legend, name, days, value, onChange }: DayRowProps) {
               <span className="text-small">{d.weekday}</span>
               <span className="text-date">{d.day}</span>
               {d.caption && (
-                <span className="text-micro font-normal">{d.caption}</span>
+                <span
+                  className={`text-micro font-normal ${d.disabled ? "" : "text-green-text group-has-checked:text-white"}`}
+                >
+                  {d.caption}
+                </span>
               )}
             </span>
           </label>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
+import { Badge } from "./Badge";
 import { Icon } from "./Icon";
 import type { IconName } from "./icons";
 
@@ -11,6 +12,12 @@ type StyleProps = {
   /** "lg" is the 54px login and form-submit size. */
   size?: "md" | "lg";
   fullWidth?: boolean;
+  /**
+   * Not built yet (Figma 55). The button stays visible and focusable, gets
+   * aria-disabled and the yellow Coming soon badge, and keeps full color so
+   * the badge text stays readable. Its onClick should explain what to do.
+   */
+  comingSoon?: boolean;
 };
 
 const variants: Record<ButtonVariant, string> = {
@@ -33,10 +40,13 @@ export function buttonClasses({
   variant = "pink",
   size = "md",
   fullWidth = false,
+  comingSoon = false,
 }: StyleProps = {}) {
   return [
     "inline-flex items-center justify-center gap-2 rounded-full border-2 whitespace-nowrap transition-colors",
-    "disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
+    comingSoon
+      ? "disabled:cursor-not-allowed disabled:opacity-50"
+      : "disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
     variants[variant],
     sizes[size],
     fullWidth ? "w-full" : "",
@@ -84,6 +94,7 @@ export function Button({
   variant,
   size,
   fullWidth,
+  comingSoon = false,
   iconLeft,
   iconRight,
   loading = false,
@@ -98,7 +109,11 @@ export function Button({
       type={type}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={[buttonClasses({ variant, size, fullWidth }), className]
+      aria-disabled={comingSoon || undefined}
+      className={[
+        buttonClasses({ variant, size, fullWidth, comingSoon }),
+        className,
+      ]
         .filter(Boolean)
         .join(" ")}
       {...rest}
@@ -106,6 +121,7 @@ export function Button({
       <Content iconLeft={iconLeft} iconRight={iconRight} loading={loading}>
         {children}
       </Content>
+      {comingSoon && <Badge kind="comingSoon" />}
     </button>
   );
 }
