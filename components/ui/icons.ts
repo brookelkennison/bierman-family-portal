@@ -18,16 +18,19 @@ import {
   Eye,
   EyeOff,
   FileText,
+  Hand,
   HeartHandshake,
   House,
   Info,
   LoaderCircle,
   LogOut,
   MapPin,
+  MessagesSquare,
   Menu,
   MessageCircle,
   NotebookPen,
   Phone,
+  Search,
   Sparkles,
   Sun,
   TrendingUp,
@@ -73,6 +76,14 @@ export const icons = {
   info: Info,
   error: CircleAlert,
   loading: LoaderCircle,
+
+  // Care plan rows, by discipline
+  aba: Users,
+  speech: MessagesSquare,
+  ot: Hand,
+
+  // Not found
+  search: Search,
 
   // "On the way" teaser list
   progress: TrendingUp,

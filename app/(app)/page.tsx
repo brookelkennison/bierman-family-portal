@@ -1,40 +1,44 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
 import { DashboardView } from "@/components/dashboard/DashboardView";
-import { Icon } from "@/components/ui/Icon";
+import { NoChildren } from "@/components/dashboard/NoChildren";
 import { getCurrentParent } from "@/lib/auth";
-import { getFamilyData } from "@/lib/data";
+import { getDefaultCenter, getFamilyData } from "@/lib/data";
 import { formatLongDate, partOfDay } from "@/lib/time";
 
 export const metadata: Metadata = { title: "Home | Bierman Family Portal" };
 
-/** Home dashboard (Figma 03 and 04). */
-export default async function HomePage() {
+/** Home dashboard (Figma 03, 03b, 04, 05). */
+export default function HomePage() {
+  return (
+    <Suspense fallback={<DashboardSkeleton />}>
+      <Dashboard />
+    </Suspense>
+  );
+}
+
+async function Dashboard() {
   const parent = await getCurrentParent();
   const family = await getFamilyData(parent.id);
+  const firstName = parent.fullName.split(" ")[0] ?? parent.fullName;
+
+  if (family.kids.length === 0) {
+    return (
+      <NoChildren firstName={firstName} center={await getDefaultCenter()} />
+    );
+  }
+
   const nowIso = new Date().toISOString();
-  const firstName = parent.fullName.split(" ")[0];
   const timezone =
     family.kids[0]?.center.timezone ?? "America/Indiana/Indianapolis";
 
   return (
-    <div className="flex flex-col gap-7">
-      <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-h1-sm text-navy lg:text-h1">
-            Good {partOfDay(nowIso, timezone)}, {firstName}
-          </h1>
-          <p className="text-muted">
-            Here&apos;s what&apos;s coming up for your family.
-          </p>
-        </div>
-        <p className="flex items-center gap-2 text-label text-ink">
-          <Icon name="date" />
-          {formatLongDate(nowIso, timezone)}
-        </p>
-      </div>
-
-      {/* No-children empty state arrives in 30c. */}
-      <DashboardView {...family} nowIso={nowIso} />
-    </div>
+    <DashboardView
+      {...family}
+      nowIso={nowIso}
+      greeting={`Good ${partOfDay(nowIso, timezone)}, ${firstName}`}
+      longDate={formatLongDate(nowIso, timezone)}
+    />
   );
 }

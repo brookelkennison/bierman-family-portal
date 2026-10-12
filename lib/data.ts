@@ -144,3 +144,32 @@ export async function getFamilyData(parentId: string): Promise<FamilyData> {
 
   return { kids, appointments };
 }
+
+const centerColumns =
+  "id, name, address, city, state, postal_code, phone, timezone" as const;
+
+/**
+ * The center to point a family to when no child is linked yet. Every center
+ * is readable by signed-in parents; with one center today, that's Westfield.
+ */
+export async function getDefaultCenter(): Promise<Center | null> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("centers")
+    .select(centerColumns)
+    .order("name")
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  return {
+    id: data.id,
+    name: data.name,
+    address: data.address,
+    city: data.city,
+    state: data.state,
+    postalCode: data.postal_code,
+    phone: data.phone,
+    timezone: data.timezone,
+  };
+}

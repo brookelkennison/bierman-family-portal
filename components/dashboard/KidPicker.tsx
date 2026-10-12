@@ -43,7 +43,9 @@ export function KidPicker({ kids, selectedId, onSelect }: KidPickerProps) {
           {selected ? `Showing ${selected.firstName}` : "Showing all kids"}
         </p>
         <p className="text-small text-muted">
-          Tap a child to see their care plan and visits.
+          {selected && kids.length > 1
+            ? "Tap All kids to see everyone."
+            : "Tap a child to see their care plan and visits."}
         </p>
       </div>
     </section>
