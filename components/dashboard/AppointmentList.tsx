@@ -12,7 +12,7 @@ type Tab = "upcoming" | "past";
 
 const LIMIT = 5;
 
-function badgeFor(a: Appointment): { kind: BadgeKind; label?: string } {
+export function badgeFor(a: Appointment): { kind: BadgeKind; label?: string } {
   if (a.status === "cancelled") {
     return {
       kind: "cancelled",
