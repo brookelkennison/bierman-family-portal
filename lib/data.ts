@@ -15,6 +15,14 @@ export type Center = {
   timezone: string;
 };
 
+export type CareTeamMember = {
+  name: string;
+  credential: string | null;
+  role: string;
+  discipline: Enums["discipline"];
+  scheduleSummary: string | null;
+};
+
 export type Child = {
   id: string;
   firstName: string;
@@ -23,6 +31,7 @@ export type Child = {
   weeklyAbaHours: number;
   carePlanNote: string | null;
   center: Center;
+  careTeam: CareTeamMember[];
 };
 
 /** Who put this on the calendar, for the badge. */
@@ -40,6 +49,7 @@ export type Appointment = {
   cancelledByKind: Enums["cancelled_by_kind"] | null;
   bookedBy: BookedBy;
   provider: string;
+  centerName: string;
   timezone: string;
 };
 
@@ -59,7 +69,7 @@ export async function getFamilyData(parentId: string): Promise<FamilyData> {
   const { data: patients, error: patientsError } = await supabase
     .from("patients")
     .select(
-      "id, first_name, date_of_birth, program, weekly_aba_hours, care_plan_note, center:centers(id, name, address, city, state, postal_code, phone, timezone)",
+      "id, first_name, date_of_birth, program, weekly_aba_hours, care_plan_note, center:centers(id, name, address, city, state, postal_code, phone, timezone), care_team(role, schedule_summary, provider:providers(display_name, credential, discipline))",
     )
     .order("date_of_birth", { ascending: true });
   if (patientsError) throw patientsError;
@@ -82,6 +92,13 @@ export async function getFamilyData(parentId: string): Promise<FamilyData> {
       phone: p.center.phone,
       timezone: p.center.timezone,
     },
+    careTeam: p.care_team.map((m) => ({
+      name: m.provider.display_name,
+      credential: m.provider.credential,
+      role: m.role,
+      discipline: m.provider.discipline,
+      scheduleSummary: m.schedule_summary,
+    })),
   }));
   if (kids.length === 0) return { kids, appointments: [] };
 
@@ -92,7 +109,7 @@ export async function getFamilyData(parentId: string): Promise<FamilyData> {
   const { data: rows, error: apptError } = await supabase
     .from("appointments")
     .select(
-      "id, patient_id, starts_at, ends_at, status, cancelled_by_kind, created_by, kind:appointment_types(label, short_label, family_bookable), provider:providers(display_name, credential, center:centers(timezone))",
+      "id, patient_id, starts_at, ends_at, status, cancelled_by_kind, created_by, kind:appointment_types(label, short_label, family_bookable), provider:providers(display_name, credential, center:centers(name, timezone))",
     )
     .gte("starts_at", from)
     .lte("starts_at", to)
@@ -121,6 +138,7 @@ export async function getFamilyData(parentId: string): Promise<FamilyData> {
     provider: [a.provider.display_name, a.provider.credential]
       .filter(Boolean)
       .join(", "),
+    centerName: a.provider.center.name,
     timezone: a.provider.center.timezone,
   }));
 
