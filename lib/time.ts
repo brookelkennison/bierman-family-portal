@@ -158,3 +158,71 @@ export function zoneName(timeZone: string, nowIso: string) {
     "timeZoneName",
   );
 }
+
+/** "10:00 AM" in the center's zone. */
+export function formatClock(iso: string, timeZone: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(iso));
+}
+
+/** "09:00:00" or "09:00" from a provider_hours row to "9:00 AM". */
+export function formatWallClock(hhmm: string) {
+  const [h = 0, m = 0] = hhmm.split(":").map(Number);
+  const period = h < 12 ? "AM" : "PM";
+  return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${period}`;
+}
+
+/** "October 2026" for a day key. */
+export function monthLabel(key: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "UTC",
+    month: "long",
+    year: "numeric",
+  }).format(keyDate(key));
+}
+
+/** 0 = Sunday, like provider_hours.weekday. */
+export function weekdayOfKey(key: string) {
+  return keyDate(key).getUTCDay();
+}
+
+/** Minutes the zone is ahead of UTC at that instant (EDT is -240). */
+function offsetMinutes(date: Date, timeZone: string) {
+  const p = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hourCycle: "h23",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).formatToParts(date);
+  const get = (t: Intl.DateTimeFormatPartTypes) => Number(part(p, t));
+  const asUtc = Date.UTC(
+    get("year"),
+    get("month") - 1,
+    get("day"),
+    get("hour"),
+    get("minute"),
+    get("second"),
+  );
+  return (asUtc - date.getTime()) / 60_000;
+}
+
+/**
+ * A wall-clock time at the center to a real instant. "2026-11-02", "10:00"
+ * in Indianapolis is 15:00 UTC (EST); the same time a week earlier is 14:00
+ * UTC (EDT). Checked twice so the answer is right on clock-change days.
+ */
+export function localToUtc(key: string, hhmm: string, timeZone: string) {
+  const [y = 0, mo = 1, d = 1] = key.split("-").map(Number);
+  const [h = 0, mi = 0] = hhmm.split(":").map(Number);
+  const guess = Date.UTC(y, mo - 1, d, h, mi);
+  let ts = guess - offsetMinutes(new Date(guess), timeZone) * 60_000;
+  ts = guess - offsetMinutes(new Date(ts), timeZone) * 60_000;
+  return new Date(ts).toISOString();
+}

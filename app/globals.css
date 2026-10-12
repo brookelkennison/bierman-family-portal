@@ -14,6 +14,7 @@
   --color-navy: #004c97;
   --color-navy-hover: #003a75;
   --color-navy-tint: #e5eef7;
+  --color-navy-deep: #002e61;
   --color-aqua: #05c3de;
   --color-aqua-tint: #e6f9fc;
   --color-aqua-light: #62d9ea;
@@ -104,6 +105,7 @@
 
   /* Depth */
   --shadow-tab: 0 1px 3px rgb(0 40 80 / 0.12);
+  --shadow-tooltip: 0 8px 24px rgb(0 0 0 / 0.18);
 
   /* Layout */
   --container-page: 1440px;

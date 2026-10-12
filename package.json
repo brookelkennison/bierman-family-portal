@@ -10,7 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "pnpm lint && pnpm typecheck && pnpm format:check",
+    "check": "pnpm lint && pnpm typecheck && pnpm format:check && pnpm test:unit",
     "db:push": "supabase db push",
     "db:types": "supabase gen types typescript --linked > lib/database.types.ts",
     "test:db": "supabase test db",

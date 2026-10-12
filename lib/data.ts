@@ -16,6 +16,7 @@ export type Center = {
 };
 
 export type CareTeamMember = {
+  providerId: string;
   name: string;
   credential: string | null;
   role: string;
@@ -69,7 +70,7 @@ export async function getFamilyData(parentId: string): Promise<FamilyData> {
   const { data: patients, error: patientsError } = await supabase
     .from("patients")
     .select(
-      "id, first_name, date_of_birth, program, weekly_aba_hours, care_plan_note, center:centers(id, name, address, city, state, postal_code, phone, timezone), care_team(role, schedule_summary, provider:providers(display_name, credential, discipline))",
+      "id, first_name, date_of_birth, program, weekly_aba_hours, care_plan_note, center:centers(id, name, address, city, state, postal_code, phone, timezone), care_team(role, schedule_summary, provider:providers(id, display_name, credential, discipline))",
     )
     .order("date_of_birth", { ascending: true });
   if (patientsError) throw patientsError;
@@ -93,6 +94,7 @@ export async function getFamilyData(parentId: string): Promise<FamilyData> {
       timezone: p.center.timezone,
     },
     careTeam: p.care_team.map((m) => ({
+      providerId: m.provider.id,
       name: m.provider.display_name,
       credential: m.provider.credential,
       role: m.role,
