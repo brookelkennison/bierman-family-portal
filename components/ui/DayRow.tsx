@@ -11,6 +11,8 @@ export type DayOption = {
   label: string;
   /** No open times that day. */
   disabled?: boolean;
+  /** Short line under the date: "Open", "Off", or "Full". */
+  caption?: string;
 };
 
 type DayRowProps = {
@@ -41,7 +43,11 @@ export function DayRow({ legend, name, days, value, onChange }: DayRowProps) {
               checked={value === d.value}
               disabled={d.disabled}
               onChange={() => onChange(d.value)}
-              aria-label={d.disabled ? `${d.label}, no open times` : d.label}
+              aria-label={
+                d.disabled
+                  ? `${d.label}, ${d.caption?.toLowerCase() ?? "no open times"}`
+                  : d.label
+              }
               className="peer sr-only"
             />
             <span
@@ -57,6 +63,9 @@ export function DayRow({ legend, name, days, value, onChange }: DayRowProps) {
             >
               <span className="text-small">{d.weekday}</span>
               <span className="text-date">{d.day}</span>
+              {d.caption && (
+                <span className="text-micro font-normal">{d.caption}</span>
+              )}
             </span>
           </label>
         ))}
