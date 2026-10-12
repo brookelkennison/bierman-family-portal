@@ -14,12 +14,13 @@ type StyleProps = {
 };
 
 const variants: Record<ButtonVariant, string> = {
-  pink: "bg-pink-button text-white hover:bg-pink-button-hover",
-  navy: "bg-navy text-white hover:bg-navy-hover",
+  pink: "border-transparent bg-pink-button text-white hover:bg-pink-button-hover",
+  navy: "border-transparent bg-navy text-white hover:bg-navy-hover",
   outline: "border-navy bg-white text-navy hover:bg-navy-tint",
-  ghost: "bg-transparent text-navy hover:bg-navy-tint",
-  danger: "bg-danger text-white hover:bg-danger-hover",
-  dangerText: "bg-transparent text-danger hover:bg-danger-tint",
+  ghost: "border-transparent bg-transparent text-navy hover:bg-navy-tint",
+  danger: "border-transparent bg-danger text-white hover:bg-danger-hover",
+  dangerText:
+    "border-transparent bg-transparent text-danger hover:bg-danger-tint",
 };
 
 const sizes = {
@@ -34,7 +35,7 @@ export function buttonClasses({
   fullWidth = false,
 }: StyleProps = {}) {
   return [
-    "inline-flex items-center justify-center gap-2 rounded-full border-2 border-transparent whitespace-nowrap transition-colors",
+    "inline-flex items-center justify-center gap-2 rounded-full border-2 whitespace-nowrap transition-colors",
     "disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
     variants[variant],
     sizes[size],

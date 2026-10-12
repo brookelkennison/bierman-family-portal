@@ -6,6 +6,8 @@ import { supabasePublishableKey, supabaseUrl } from "@/lib/env";
 const PUBLIC_PATHS = ["/login"];
 const DEV_ONLY_PUBLIC_PATHS = ["/styleguide"];
 
+const isDev = process.env.NODE_ENV === "development";
+
 function isPublic(pathname: string) {
   if (PUBLIC_PATHS.includes(pathname)) return true;
   return (
@@ -15,12 +17,51 @@ function isPublic(pathname: string) {
 }
 
 /**
- * Runs before every page request:
- * 1. Refreshes the Supabase session cookie if it's close to expiring.
- * 2. Sends logged-out visitors to /login, and logged-in users away from it.
+ * Strict Content-Security-Policy. Only scripts carrying this request's nonce
+ * can run (Next adds it to its own scripts automatically), so an injected
+ * <script> is blocked. Dev needs 'unsafe-eval' for React's error overlay.
+ */
+function contentSecurityPolicy(nonce: string) {
+  return [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""}`,
+    // Dev tools and hot reload inject unnonced <style> tags, so dev allows
+    // inline styles. Production stays nonce-only.
+    isDev
+      ? "style-src 'self' 'unsafe-inline'"
+      : `style-src 'self' 'nonce-${nonce}'`,
+    // Inline style attributes (used by next/image) can't run code.
+    "style-src-attr 'unsafe-inline'",
+    "img-src 'self' blob: data:",
+    "font-src 'self'",
+    `connect-src 'self' ${new URL(supabaseUrl).origin}`,
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    ...(isDev ? [] : ["upgrade-insecure-requests"]),
+  ].join("; ");
+}
+
+/**
+ * Runs before every page and API request:
+ * 1. Sets a per-request CSP nonce and no-store caching.
+ * 2. Refreshes the Supabase session cookie if it's close to expiring.
+ * 3. Sends logged-out visitors to /login, and logged-in users away from it.
  */
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  const nonce = btoa(crypto.randomUUID());
+  const csp = contentSecurityPolicy(nonce);
+
+  // Pass the CSP to Next on the request so it can stamp the nonce on its scripts.
+  const forward = () => {
+    const headers = new Headers(request.headers);
+    headers.set("x-nonce", nonce);
+    headers.set("Content-Security-Policy", csp);
+    return NextResponse.next({ request: { headers } });
+  };
+
+  let response = forward();
 
   const supabase = createServerClient(supabaseUrl, supabasePublishableKey, {
     cookies: {
@@ -31,7 +72,7 @@ export async function proxy(request: NextRequest) {
         cookiesToSet.forEach(({ name, value }) =>
           request.cookies.set(name, value),
         );
-        response = NextResponse.next({ request });
+        response = forward();
         cookiesToSet.forEach(({ name, value, options }) =>
           response.cookies.set(name, value, options),
         );
@@ -51,7 +92,10 @@ export async function proxy(request: NextRequest) {
   // API routes answer with JSON, never a redirect page, so the client can
   // show "Your session ended" instead of trying to parse HTML.
   if (!signedIn && pathname.startsWith("/api/")) {
-    return NextResponse.json({ error: "not_signed_in" }, { status: 401 });
+    return withSecurity(
+      NextResponse.json({ error: "not_signed_in" }, { status: 401 }),
+      csp,
+    );
   }
 
   if (!signedIn && !isPublic(pathname)) {
@@ -62,16 +106,23 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = hadSession ? "?reason=expired" : "";
-    return redirectKeepingCookies(url, response);
+    return withSecurity(redirectKeepingCookies(url, response), csp);
   }
 
   if (signedIn && pathname === "/login") {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     url.search = "";
-    return redirectKeepingCookies(url, response);
+    return withSecurity(redirectKeepingCookies(url, response), csp);
   }
 
+  return withSecurity(response, csp);
+}
+
+/** CSP plus no-store: browsers and proxies never keep a copy of these pages. */
+function withSecurity(response: NextResponse, csp: string) {
+  response.headers.set("Content-Security-Policy", csp);
+  response.headers.set("Cache-Control", "private, no-store, max-age=0");
   return response;
 }
 
