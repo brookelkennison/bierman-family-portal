@@ -44,6 +44,9 @@ export default defineConfig({
     command: `pnpm build && pnpm start -p ${PORT}`,
     url: `http://localhost:${PORT}/login`,
     reuseExistingServer: !process.env.CI,
+    // Show server logs in CI so failures (like a rejected login) are visible.
+    stdout: process.env.CI ? "pipe" : "ignore",
+    stderr: "pipe",
     timeout: 180_000,
   },
 });

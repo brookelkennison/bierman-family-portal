@@ -29,6 +29,12 @@ export async function login(
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
+    // Server log only: the reason code, never the email or password. The
+    // user always sees the same message.
+    console.warn(
+      "[auth] sign-in failed:",
+      error.code ?? error.status ?? error.name,
+    );
     return { error: GENERIC_ERROR, email };
   }
 
