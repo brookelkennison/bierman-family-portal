@@ -33,6 +33,7 @@ import {
   Search,
   Sparkles,
   Sun,
+  Trash2,
   TrendingUp,
   UserRound,
   Users,
@@ -64,6 +65,7 @@ export const icons = {
 
   // Actions
   reportAbsence: MessageCircle,
+  delete: Trash2,
   showPassword: Eye,
   hidePassword: EyeOff,
 
