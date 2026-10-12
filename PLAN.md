@@ -9,7 +9,7 @@ Take-home for Bierman Autism Centers: a secure "Patient Appointment Manager" bui
 - Repo: https://github.com/brookelkennison/bierman-family-portal
 - Planning board (FigJam): https://www.figma.com/board/4PoFJM4jzUJpHQIFjq1soy
 - Mockups (Figma, page "Mockups v4"): https://www.figma.com/design/Xnyq8R0Y9v9PYiz0IMo8Rv
-- Live URL: add after deploy
+- Live URL: https://bierman-family-portal.vercel.app/
 
 **Scope labels used below**
 

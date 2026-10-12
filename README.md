@@ -7,7 +7,7 @@ their children's therapy schedule and care plans, and book parent training
 with their child's BCBA. Built with Next.js, TypeScript, Tailwind, and
 Supabase (Postgres and Auth).
 
-**Live:** [live URL] · **Fake data only.** Every name, child, and visit is made up.
+**Live:** https://bierman-family-portal.vercel.app/ · **Fake data only.** Every name, child, and visit is made up.
 
 ![Dashboard](docs/screenshots/03-dashboard-desktop.png)
 
@@ -19,7 +19,7 @@ Supabase (Postgres and Auth).
 | `casey@example.com`  | Parent of Ava, a different family | Proves families can't see each other |
 | `jamie@example.com`  | No children linked yet            | The empty state                      |
 
-Password for all three: `[demo password]`
+Password for all three: `Bierman1!`
 
 ## Scope
 
@@ -39,6 +39,81 @@ Per the team's guidance (Oct 11), this covers **create and read**:
 - **Each BCBA has their own hours** for parent training, and parents pick from BCBAs at their child's home center. ([ADR 010](docs/adr/010-provider-hours.md))
 - **Times are stored in UTC and always shown in the center's time zone**, with the zone (EDT or EST), never the browser's. ([ADR 004](docs/adr/004-utc-storage-center-timezones.md))
 - Visits start on the hour or half hour, at most 60 days out.
+
+## Design
+
+I designed every screen in [Figma](https://www.figma.com/design/Xnyq8R0Y9v9PYiz0IMo8Rv) before writing code, then built against it. [docs/design-qa.md](docs/design-qa.md) compares each frame to the build and lists where I changed course on purpose.
+
+The person I designed for is a parent checking in between work and pickup. They come here to do three things: see what's next, check a visit, and book parent training. Every layout choice below comes back to keeping that path short.
+
+### No sidebar
+
+Most portals put navigation in a left sidebar. I left it out. A sidebar is built for apps with many sections that people live in all day. This app has three places to go (Home, Appointments, Help) and one action that matters most (Book a visit). A sidebar would add a column of chrome for three links and squeeze the week view and the appointment list into less space.
+
+So navigation is a single top bar: logo, the three links, a pink **Book a visit** button, and the parent's menu (name, help, sign out). The booking button sits in the same spot on every page, so a parent never has to hunt for it. On mobile, the same top bar sits above a row of tab pills. I skipped a phone-style bottom tab bar because this is a responsive web app, not a native one, and a fake native bar fights the browser's own controls.
+
+The one place a side column shows up is booking, and it's a summary, not navigation (see below).
+
+### Home: what's next, first
+
+![Home, filtered to Leo](docs/screenshots/03b-dashboard-leo-desktop.png)
+
+- **Kid bubbles** at the top filter the whole page by child. Headings change with the filter ("Leo's next week," "Leo's appointments") and "Showing Leo" says out loud which view you're in. Parents with more than one child usually think about one kid at a time.
+- **The Today or Next up card** answers the first question a parent has, with the time, the center, and the time zone right there.
+- **Next week** is a strip, not a full calendar. Therapy runs on a standing weekly schedule, so a week is the unit parents plan around.
+- **The care plan card** shows what the care team set and labels it "Set by care team," so it's clear what a parent can and can't change before they ever try.
+- **Book parent training** sits in the right column with each child's BCBA already named.
+
+<details>
+<summary>Home on mobile</summary>
+
+<img src="docs/screenshots/03-dashboard-mobile.png" alt="Home on mobile" width="320">
+
+</details>
+
+### Booking: one page with a live summary
+
+![Book parent training](docs/screenshots/06-book-desktop.png)
+
+The Figma flow started as one step per screen on mobile. I built it as one scrolling page with numbered sections instead, and a stepper at the top that fills in as you go. Every answer stays visible, so changing the child or the BCBA doesn't mean backing through screens.
+
+- **"Your visit"** on desktop is a sticky summary that updates as you choose. It's read-only on purpose. It's there to confirm, not to edit.
+- **Therapy types are listed but locked.** ABA, speech, and OT show "Set by care team" with a note to call the center, so parents learn why they can't book them instead of wondering where they went.
+- **Days say Open, Off, or Full in words**, not just color, and the child's own BCBA is marked "Your BCBA."
+- There's no "Where" step. Each child has one home center, so it's shown in the summary instead of asked.
+
+<details>
+<summary>Booking on mobile</summary>
+
+<img src="docs/screenshots/06-book-mobile.png" alt="Booking on mobile" width="320">
+
+</details>
+
+### Appointments: one list, clear ownership
+
+![Appointments](docs/screenshots/14-appointments-desktop.png)
+
+The list groups visits by day, and filters by child and by Upcoming, Past, or Cancelled. Every visit carries a badge that says who owns it: **Scheduled by your care team** or **Booked by you**. That one label tells a parent what they're allowed to change, using text and an icon, never color alone.
+
+<details>
+<summary>Appointment detail and mobile</summary>
+
+<img src="docs/screenshots/10-appointment-detail-desktop.png" alt="Appointment detail" width="720">
+
+<img src="docs/screenshots/14-appointments-mobile.png" alt="Appointments on mobile" width="320">
+
+</details>
+
+### Coming soon, shown honestly
+
+Reschedule, cancel, report absence, and delete are out of scope, but I kept them where the design puts them. The buttons stay full color with a **Coming soon** badge, and clicking one explains how to make the change by phone. Reviewers can see the whole design, and a parent is never told something happened when it didn't. The **On the way** card does the same for future features like session notes and progress.
+
+### Smaller choices
+
+- Times always show in the center's time zone with the zone written out ("Eastern Time"), never the browser's.
+- Copy uses the child's name instead of pronouns, and never promises something the app doesn't do.
+- Illustrated child avatars instead of initials, so siblings are easy to tell apart at a glance.
+- Built to WCAG 2.2 AA: works at 320px and 200% zoom, full keyboard support, focus never hides under the sticky header. Details in [docs/accessibility.md](docs/accessibility.md).
 
 ## Run it locally
 
@@ -273,5 +348,5 @@ This is a take-home with fake data. It is **not HIPAA compliant**. Before real f
 
 - [Figma mockups](https://www.figma.com/design/Xnyq8R0Y9v9PYiz0IMo8Rv) (page "Mockups v4") and how the build compares: [docs/design-qa.md](docs/design-qa.md)
 - [FigJam planning board](https://www.figma.com/board/4PoFJM4jzUJpHQIFjq1soy): journeys, data flow, ERD, gap review
-- [GitHub Project board](https://github.com/brookelkennison/bierman-family-portal/issues) and the original [build plan](PLAN.md)
+- [GitHub Project board](https://github.com/users/brookelkennison/projects/2/views/1) and the original [build plan](PLAN.md)
 - [All docs](docs/README.md)

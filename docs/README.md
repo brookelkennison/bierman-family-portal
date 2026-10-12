@@ -30,7 +30,7 @@
 - [Build plan](../PLAN.md)
 - [Figma mockups](https://www.figma.com/design/Xnyq8R0Y9v9PYiz0IMo8Rv)
 - [FigJam planning board](https://www.figma.com/board/4PoFJM4jzUJpHQIFjq1soy)
-- [Issues and Project board](https://github.com/brookelkennison/bierman-family-portal/issues)
+- [GitHub Project board](https://github.com/users/brookelkennison/projects/2/views/1)
 
 ---
 
