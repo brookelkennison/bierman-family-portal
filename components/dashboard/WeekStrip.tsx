@@ -21,16 +21,25 @@ type WeekStripProps = {
   appointments: Appointment[];
   nowIso: string;
   timezone: string;
+  /** "Leo" when one child is selected, for "Leo's next week". */
+  childName?: string;
 };
 
 /** Mon to Fri at a glance (Figma 03). Starts on next week. */
-export function WeekStrip({ appointments, nowIso, timezone }: WeekStripProps) {
+export function WeekStrip({
+  appointments,
+  nowIso,
+  timezone,
+  childName,
+}: WeekStripProps) {
   const [offset, setOffset] = useState(0);
   const monday = addDays(nextMonday(dayKey(nowIso, timezone)), offset * 7);
   const days = [0, 1, 2, 3, 4].map((i) => addDays(monday, i));
 
-  const heading =
-    offset === -1
+  const weekOf = `week of ${dayKeyLabels(monday).date}`;
+  const heading = childName
+    ? `${childName}'s ${offset === -1 ? "week" : offset === 0 ? "next week" : weekOf}`
+    : offset === -1
       ? "This week"
       : offset === 0
         ? "Next week"

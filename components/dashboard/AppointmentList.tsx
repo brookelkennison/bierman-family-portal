@@ -31,12 +31,15 @@ type AppointmentListProps = {
   appointments: Appointment[];
   /** Server time, so server and browser agree on what's upcoming. */
   nowIso: string;
+  /** "Leo" when one child is selected, for "Leo's appointments". */
+  childName?: string;
 };
 
 /** "Appointments" card with Upcoming / Past (Figma 03). */
 export function AppointmentList({
   appointments,
   nowIso,
+  childName,
 }: AppointmentListProps) {
   const [tab, setTab] = useState<Tab>("upcoming");
   const now = new Date(nowIso).getTime();
@@ -58,7 +61,7 @@ export function AppointmentList({
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 id="appointments-heading" className="text-h2 text-navy">
-          Appointments
+          {childName ? `${childName}'s appointments` : "Appointments"}
         </h2>
         <Segmented
           label="Which appointments"
