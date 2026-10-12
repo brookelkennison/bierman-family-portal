@@ -21,7 +21,8 @@ test("another family's appointment is a 404", async ({ browser, page }) => {
   await expect(
     page.getByRole("heading", { name: "We couldn't find that page" }),
   ).toBeVisible();
-  await expect(page.getByText("Ava")).toHaveCount(0);
+  // Whole word: a plain "Ava" match also hits "available" in the 404 text.
+  await expect(page.getByText(/\bAva\b/)).toHaveCount(0);
 });
 
 test("unknown pages show the 404 inside the app", async ({ page }) => {

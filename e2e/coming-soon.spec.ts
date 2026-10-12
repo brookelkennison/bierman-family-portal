@@ -17,7 +17,10 @@ test("Coming soon buttons explain and send no request", async ({ page }) => {
     .first();
   await expect(button).toHaveAttribute("aria-disabled", "true");
   await expect(button).toContainText("Coming soon");
-  await button.click();
+  // Playwright won't click an aria-disabled button on its own (it waits for
+  // it to become enabled). Real users can, and that's the point: clicking
+  // explains what to do instead. force skips only that wait.
+  await button.click({ force: true });
 
   await expect(
     page

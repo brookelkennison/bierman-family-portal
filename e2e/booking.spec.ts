@@ -29,7 +29,11 @@ test("book parent training and find it in the list", async ({ page }) => {
   }
   const row = page.locator("article", { has: link });
   await expect(row).toBeVisible();
-  await expect(row.getByText("Booked by you")).toBeVisible();
+  // The row renders its badge twice (one for phones, one for desktop) and
+  // hides one with CSS, so look only at the visible one.
+  await expect(
+    row.getByText("Booked by you").filter({ visible: true }),
+  ).toBeVisible();
 
   // And its detail page has the note.
   await link.click();

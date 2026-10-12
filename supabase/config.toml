@@ -219,8 +219,10 @@ web3 = 30
 # secret = ""
 
 [auth.email]
-# Allow/disallow new user signups via email to your project.
-enable_signup = false
+# Despite the name, this turns the whole email provider on or off, login
+# included. It must stay true so parents can log in with email and password.
+# Sign-ups are still blocked by enable_signup = false under [auth] above.
+enable_signup = true
 # If enabled, a user will be required to confirm any email change on both the old, and new email
 # addresses. If disabled, only the new email is required to confirm.
 double_confirm_changes = true

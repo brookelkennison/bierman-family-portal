@@ -114,7 +114,13 @@ export async function proxy(request: NextRequest) {
     return withSecurity(redirectKeepingCookies(url, response), csp);
   }
 
-  if (signedIn && pathname === "/login") {
+  // A revoked session still has a validly signed token, so "?reason=expired"
+  // must reach the login page instead of bouncing back to the app (a loop).
+  if (
+    signedIn &&
+    pathname === "/login" &&
+    request.nextUrl.searchParams.get("reason") !== "expired"
+  ) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     url.search = "";
