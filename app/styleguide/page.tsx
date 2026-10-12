@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+import { AppointmentRow } from "@/components/ui/AppointmentRow";
 import { AuthBlobs } from "@/components/ui/AuthBlobs";
+import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { KidAvatar } from "@/components/ui/KidAvatar";
+import { KidBubble } from "@/components/ui/KidBubble";
+import { Skeleton, SkeletonList } from "@/components/ui/Skeleton";
+import { Toast } from "@/components/ui/Toast";
 import { Banner } from "@/components/ui/Banner";
 import { Button, ButtonLink, type ButtonVariant } from "@/components/ui/Button";
 import { PasswordField, TextField } from "@/components/ui/Field";
@@ -111,7 +119,7 @@ export default function StyleguidePage() {
       </Section>
 
       <Section title="Banners">
-        <div className="grid max-w-110 gap-4">
+        <div className="grid max-w-200 gap-4">
           <Banner tone="error" title="We couldn't log you in">
             That email and password don&apos;t match. Try again, or contact your
             center if you need help.
@@ -129,6 +137,100 @@ export default function StyleguidePage() {
         <div className="relative h-115 overflow-hidden rounded-card bg-linear-150 from-aqua to-aqua-light">
           <AuthBlobs />
         </div>
+      </Section>
+
+      <Section title="Badges">
+        <div className="flex flex-wrap items-center gap-3">
+          <Badge kind="careTeam" />
+          <Badge kind="bookedByYou" />
+          <Badge kind="cancelled" />
+          <Badge kind="cancelled">Cancelled by center</Badge>
+          <Badge kind="comingSoon" />
+        </div>
+      </Section>
+
+      <Section title="Kid avatars and bubbles">
+        <div className="flex flex-wrap items-center gap-4">
+          <KidAvatar firstName="Maya" size={28} />
+          <KidAvatar firstName="Maya" size={40} />
+          <KidAvatar firstName="Leo" size={68} />
+          <KidAvatar firstName="Ava" size={40} alt="Ava" />
+          <span className="text-small text-muted">
+            Ava has no illustration, so she gets initials.
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-7">
+          <KidBubble detail="2 children" selected />
+          <KidBubble firstName="Maya" detail="Age 7" selected={false} />
+          <KidBubble firstName="Leo" detail="Age 3" selected={false} />
+        </div>
+      </Section>
+
+      <Section title="Appointment rows">
+        <div className="flex flex-col gap-3">
+          <AppointmentRow
+            weekday="Thu"
+            day="8"
+            title="ABA session"
+            childFirstName="Leo"
+            timeRange="9:00 AM to 2:00 PM EDT"
+            provider="Sam Patel, BCBA"
+            badge="careTeam"
+            href="/styleguide"
+          />
+          <AppointmentRow
+            weekday="Thu"
+            day="22"
+            title="Parent training"
+            childFirstName="Maya"
+            timeRange="10:00 to 11:00 AM EDT"
+            provider="Taylor Brooks, BCBA"
+            badge="bookedByYou"
+            href="/styleguide"
+          />
+          <AppointmentRow
+            weekday="Fri"
+            day="9"
+            title="ABA session"
+            childFirstName="Leo"
+            timeRange="9:00 AM to 2:00 PM EDT"
+            provider="Sam Patel, BCBA"
+            badge="cancelled"
+            badgeLabel="Cancelled by center"
+            href="/styleguide"
+          />
+        </div>
+      </Section>
+
+      <Section title="Card, toast, loading">
+        <div className="grid gap-6 md:grid-cols-2">
+          <Card>
+            <h3 className="text-h2 text-navy">Westfield center</h3>
+            <p className="mt-2 text-muted">
+              16414 Southpark Dr, Westfield, IN 46074
+            </p>
+          </Card>
+          <div className="flex flex-col gap-3">
+            <Toast title="Parent training booked" detail="Maya · Thu, Oct 22" />
+            <Skeleton className="h-6 w-1/2" />
+          </div>
+        </div>
+        <SkeletonList rows={2} />
+      </Section>
+
+      <Section title="Empty state">
+        <EmptyState
+          title="No cancelled visits"
+          actions={
+            <>
+              <Button variant="outline">See upcoming</Button>
+              <Button variant="ghost">See past visits</Button>
+            </>
+          }
+        >
+          <p>Visits you or the center cancel show up here.</p>
+          <p>Switch to Upcoming or Past to see other visits.</p>
+        </EmptyState>
       </Section>
 
       <Section title="Icons">
