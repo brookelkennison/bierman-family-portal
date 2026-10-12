@@ -142,7 +142,7 @@ You need Node 22+, pnpm, and a free [Supabase](https://supabase.com) project.
    ```bash
    pnpm dev
    ```
-   Open http://localhost:3000 and log in with a demo account.
+   Open http://localhost:3000 and log in with a demo account and the `DEMO_PASSWORD` you set in `.env.seed`.
 
 Running `pnpm seed` again resets the demo data.
 
@@ -331,7 +331,7 @@ CI runs all of it on every push, against its own throwaway Supabase in Docker. L
 
 Accessibility results and per-screen notes: [docs/accessibility.md](docs/accessibility.md).
 
-## What's not production-ready
+## What I would do next
 
 This is a take-home with fake data. It is **not HIPAA compliant**. Before real families used it:
 
