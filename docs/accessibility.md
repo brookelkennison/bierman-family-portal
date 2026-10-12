@@ -1,3 +1,5 @@
+[README](../README.md) › [Docs](README.md) › Accessibility
+
 # Accessibility
 
 **Target:** WCAG 2.2 AA. Bierman serves families who may themselves have
@@ -104,3 +106,7 @@ Tab moves between controls. Safari works best with VoiceOver.
 - axe runs the WCAG 2.1 rule set. Two 2.2 criteria are covered by our own
   tests instead: focus not obscured (2.4.11) in `layout.spec.ts`, and target
   size (2.5.8), which holds because buttons and tiles are 36px or larger.
+
+---
+
+‹ [Architecture](architecture.md) · Next: [Design QA](design-qa.md) ›
