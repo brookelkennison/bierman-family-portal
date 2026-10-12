@@ -19,6 +19,7 @@ import {
   dayKey,
   dayKeyLabels,
   formatShortDate,
+  formatClock,
   formatTimeRange,
   formatWallClock,
   monthLabel,
@@ -57,7 +58,12 @@ function hoursSummary(hours: BookingData["providers"][number]["hours"]) {
   return `${days} · ${formatWallClock(first.startsAt)} to ${formatWallClock(first.endsAt)}`;
 }
 
-type ErrorState = { title: string; message: string } | null;
+/** "taken" shows inside the date and time card; "failed" at the top. */
+type ErrorState = {
+  kind: "taken" | "failed";
+  title: string;
+  message: string;
+} | null;
 
 /**
  * Book parent training (Figma 06, 07). One page of numbered questions with a
@@ -216,26 +222,35 @@ export function BookingForm(data: BookingData) {
           notes: notes || undefined,
         }),
       });
-      if (res.ok) {
-        router.push("/");
-        router.refresh();
-        return;
-      }
       const body = (await res.json().catch(() => ({}))) as {
+        id?: string;
         error?: string;
         message?: string;
       };
+      if (res.ok && body.id) {
+        router.push(`/book/confirmed/${body.id}`);
+        return;
+      }
       if (res.status === 409) {
         // Keep everything else, drop the time, and load fresh busy times.
         setSlot(null);
         router.refresh();
-        setError({
-          title: "That time was just taken",
-          message:
-            body.message ?? "Pick another time. Your other choices are saved.",
-        });
+        setError(
+          body.error === "child_busy"
+            ? {
+                kind: "taken",
+                title: `${child.firstName} is busy then`,
+                message: `${child.firstName} already has a visit at ${formatClock(slot, timezone)}. Here are the other open times.`,
+              }
+            : {
+                kind: "taken",
+                title: "That time was just booked",
+                message: `Someone booked ${formatClock(slot, timezone)} a moment ago. Here are the times still open.`,
+              },
+        );
       } else {
         setError({
+          kind: "failed",
           title:
             res.status === 403
               ? "You can't book this visit"
@@ -247,6 +262,7 @@ export function BookingForm(data: BookingData) {
       }
     } catch {
       setError({
+        kind: "failed",
         title: "We couldn't book that time",
         message:
           "Nothing was booked. Check your connection and try again, or call your center if it keeps happening.",
@@ -263,7 +279,7 @@ export function BookingForm(data: BookingData) {
     <div className="flex flex-col gap-6">
       <Stepper steps={STEPS} current={current} />
 
-      {error && (
+      {error?.kind === "failed" && (
         <Banner tone="error" title={error.title} ref={errorRef}>
           {error.message}
         </Banner>
@@ -406,6 +422,11 @@ export function BookingForm(data: BookingData) {
                 </div>
               }
             >
+              {error?.kind === "taken" && (
+                <Banner tone="error" title={error.title} ref={errorRef}>
+                  {error.message}
+                </Banner>
+              )}
               <DayRow
                 legend={`Week of ${dayKeyLabels(weekStart).date}`}
                 name="day"
@@ -531,7 +552,9 @@ export function BookingForm(data: BookingData) {
           <p className="text-center text-small text-muted">
             {ready
               ? "Need to change it later? Call your center."
-              : "Answer each question to book."}
+              : error?.kind === "taken"
+                ? "Pick a new time to continue. Your other choices are saved."
+                : "Answer each question to book."}
           </p>
         </aside>
       </div>
