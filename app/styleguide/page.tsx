@@ -15,6 +15,8 @@ import { Button, ButtonLink, type ButtonVariant } from "@/components/ui/Button";
 import { PasswordField, TextField } from "@/components/ui/Field";
 import { Icon } from "@/components/ui/Icon";
 import { icons, type IconName } from "@/components/ui/icons";
+import { BookingDemo } from "./BookingDemo";
+import { DialogDemo } from "./DialogDemo";
 
 export const metadata: Metadata = {
   title: "Styleguide | Bierman Family Portal",
@@ -231,6 +233,14 @@ export default function StyleguidePage() {
           <p>Visits you or the center cancel show up here.</p>
           <p>Switch to Upcoming or Past to see other visits.</p>
         </EmptyState>
+      </Section>
+
+      <Section title="Booking: stepper, days, times">
+        <BookingDemo />
+      </Section>
+
+      <Section title="Dialog">
+        <DialogDemo />
       </Section>
 
       <Section title="Icons">
