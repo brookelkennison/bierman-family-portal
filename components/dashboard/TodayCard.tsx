@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Badge } from "@/components/ui/Badge";
 import { Button, ButtonLink } from "@/components/ui/Button";
+import { ComingSoonNote } from "@/components/ui/ComingSoonNote";
 import { Icon } from "@/components/ui/Icon";
 import type { Appointment } from "@/lib/data";
 import { dayKey, formatShortDate, formatTimeRange } from "@/lib/time";
@@ -89,33 +89,15 @@ export function TodayCard({
           <Button
             variant="outline"
             iconLeft="reportAbsence"
-            aria-expanded={showAbsence}
-            aria-controls="absence-coming-soon"
-            onClick={() => setShowAbsence((open) => !open)}
+            comingSoon
+            onClick={() => setShowAbsence(true)}
           >
             Report absence
           </Button>
         </div>
 
         {showAbsence && (
-          <div
-            id="absence-coming-soon"
-            role="status"
-            className="flex flex-col items-start gap-2 rounded-banner bg-white p-4"
-          >
-            <Badge kind="comingSoon" />
-            <p className="text-small text-ink">
-              Reporting an absence here is on the way. For now, call the center
-              at{" "}
-              <a
-                href={`tel:${centerPhone.replace(/\D/g, "")}`}
-                className="font-semibold text-navy underline underline-offset-4"
-              >
-                {centerPhone}
-              </a>
-              .
-            </p>
-          </div>
+          <ComingSoonNote centerName={next.centerName} phone={centerPhone} />
         )}
       </div>
     </section>
