@@ -45,6 +45,9 @@ for (const size of sizes) {
         await page.waitForURL(/\/appointments\/[0-9a-f-]{36}$/);
       }
       await page.waitForLoadState("networkidle");
+      // Clicking scrolls the page, and a full-page shot taken mid-scroll
+      // draws the sticky header halfway down. Start from the top.
+      await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({
         path: `docs/screenshots/${shot.name}-${size.name}.png`,
         fullPage: true,
