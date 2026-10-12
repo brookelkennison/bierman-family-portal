@@ -2,8 +2,8 @@ import { icons, type IconName } from "./icons";
 
 type IconProps = {
   name: IconName;
-  /** 14 for badges, 18 for buttons and rows, 24 for headers. */
-  size?: 14 | 18 | 24;
+  /** 14 for badges, 16 for row details, 18 for buttons, 24 for headers. */
+  size?: 14 | 16 | 18 | 24 | 30;
   /**
    * Leave out for decorative icons (hidden from screen readers).
    * Set it only when the icon is the sole content, like an icon-only button

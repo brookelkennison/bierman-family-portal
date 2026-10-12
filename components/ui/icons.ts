@@ -66,7 +66,8 @@ export const icons = {
 
   // Badges and status
   careTeam: Users,
-  bookedByYou: CircleCheck,
+  bookedByYou: UserRound,
+  success: CircleCheck,
   cancelled: CircleX,
   comingSoon: Sparkles,
   info: Info,

@@ -84,6 +84,12 @@
   --text-button-lg: 16px;
   --text-button-lg--line-height: 24px;
   --text-button-lg--font-weight: 700;
+  --text-date: 24px;
+  --text-date--line-height: 28px;
+  --text-date--font-weight: 700;
+  --text-micro: 11px;
+  --text-micro--line-height: 16px;
+  --text-micro--font-weight: 700;
   --text-tiny: 12px;
   --text-tiny--line-height: 16px;
 
