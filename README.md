@@ -117,6 +117,8 @@ Reschedule, cancel, report absence, and delete are out of scope, but I kept them
 
 ## Run it locally
 
+**You don't need to run it locally to review it.** The [live site](https://bierman-family-portal.vercel.app/) has demo data, and the logins above work there. These steps are for anyone who wants to run the code against their own Supabase project.
+
 You need Node 22+, pnpm, and a free [Supabase](https://supabase.com) project.
 
 1. **Clone and install**
