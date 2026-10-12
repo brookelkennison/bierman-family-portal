@@ -446,6 +446,16 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      book_appointment: {
+        Args: {
+          p_notes?: string;
+          p_patient_id: string;
+          p_provider_id: string;
+          p_starts_at: string;
+          p_type: string;
+        };
+        Returns: string;
+      };
       my_patient_ids: { Args: never; Returns: string[] };
     };
     Enums: {
