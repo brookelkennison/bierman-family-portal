@@ -18,7 +18,11 @@ export const getCurrentParent = cache(async (): Promise<Parent> => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  // The token can still look valid to the proxy (getClaims checks the
+  // signature only) after the session was revoked, e.g. by logging out on
+  // another device. Send them to log in again, and tell the proxy not to
+  // bounce them back here, which would loop.
+  if (!user) redirect("/login?reason=expired");
 
   const { data: profile } = await supabase
     .from("profiles")

@@ -21,7 +21,7 @@ function isPublic(pathname: string) {
  * can run (Next adds it to its own scripts automatically), so an injected
  * <script> is blocked. Dev needs 'unsafe-eval' for React's error overlay.
  */
-function contentSecurityPolicy(nonce: string) {
+function contentSecurityPolicy(nonce: string, https: boolean) {
   return [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""}`,
@@ -39,7 +39,9 @@ function contentSecurityPolicy(nonce: string) {
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    ...(isDev ? [] : ["upgrade-insecure-requests"]),
+    // Only on https: on http://localhost (E2E against next start) it would
+    // try to load the app's own files over https and break the page.
+    ...(https ? ["upgrade-insecure-requests"] : []),
   ].join("; ");
 }
 
@@ -51,7 +53,10 @@ function contentSecurityPolicy(nonce: string) {
  */
 export async function proxy(request: NextRequest) {
   const nonce = btoa(crypto.randomUUID());
-  const csp = contentSecurityPolicy(nonce);
+  const csp = contentSecurityPolicy(
+    nonce,
+    request.nextUrl.protocol === "https:",
+  );
 
   // Pass the CSP to Next on the request so it can stamp the nonce on its scripts.
   const forward = () => {
@@ -109,7 +114,13 @@ export async function proxy(request: NextRequest) {
     return withSecurity(redirectKeepingCookies(url, response), csp);
   }
 
-  if (signedIn && pathname === "/login") {
+  // A revoked session still has a validly signed token, so "?reason=expired"
+  // must reach the login page instead of bouncing back to the app (a loop).
+  if (
+    signedIn &&
+    pathname === "/login" &&
+    request.nextUrl.searchParams.get("reason") !== "expired"
+  ) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     url.search = "";
