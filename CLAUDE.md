@@ -24,6 +24,8 @@ pnpm db:push (apply migrations to the hosted project) · pnpm db:types (regenera
 
 pnpm test:db (pgTAP tests in supabase/tests; runs in CI against a throwaway database, needs Docker locally)
 
+pnpm seed (demo data and logins into the hosted project; needs .env.seed with the secret key, which never leaves that file)
+
 Before every commit: pnpm format, then pnpm check, then git add. Commit command lists always include pnpm format before git add.
 
 ## How to work with me

@@ -13,7 +13,8 @@
     "check": "pnpm lint && pnpm typecheck && pnpm format:check",
     "db:push": "supabase db push",
     "db:types": "supabase gen types typescript --linked > lib/database.types.ts",
-    "test:db": "supabase test db"
+    "test:db": "supabase test db",
+    "seed": "node --env-file=.env.local --env-file=.env.seed --experimental-strip-types scripts/seed.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
