@@ -116,3 +116,45 @@ export function ageInYears(dateOfBirth: string, nowIso: string) {
   if (beforeBirthday) age -= 1;
   return age;
 }
+
+/*
+ * Day-key math for the week strip. Keys are "YYYY-MM-DD" calendar days that
+ * were already worked out in the center's zone, so plain UTC math on them is
+ * safe (no daylight-saving surprises).
+ */
+function keyDate(key: string) {
+  return new Date(`${key}T12:00:00Z`);
+}
+
+/** "2026-10-12" plus 3 days is "2026-10-15". */
+export function addDays(key: string, days: number) {
+  const d = keyDate(key);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+/** The Monday after the given day. On a Monday, that's next week's Monday. */
+export function nextMonday(key: string) {
+  const weekday = keyDate(key).getUTCDay(); // 0 is Sunday
+  return addDays(key, (8 - weekday) % 7 || 7);
+}
+
+/** Labels for a day key: { weekday: "Mon", date: "Oct 12" }. */
+export function dayKeyLabels(key: string) {
+  const d = keyDate(key);
+  const fmt = (o: Intl.DateTimeFormatOptions) =>
+    new Intl.DateTimeFormat("en-US", { timeZone: "UTC", ...o }).format(d);
+  return {
+    weekday: fmt({ weekday: "short" }),
+    longWeekday: fmt({ weekday: "long" }),
+    date: fmt({ month: "short", day: "numeric" }),
+  };
+}
+
+/** "Eastern Time" for America/Indiana/Indianapolis. */
+export function zoneName(timeZone: string, nowIso: string) {
+  return part(
+    parts(nowIso, timeZone, { timeZoneName: "longGeneric" }),
+    "timeZoneName",
+  );
+}
