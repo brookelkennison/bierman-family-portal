@@ -14,11 +14,15 @@ Scope: create and read appointments, run locally. Update and delete show as Comi
 - components/ shared UI, plain Tailwind and native HTML (no component library)
 - lib/ helpers, Supabase clients, Zod schemas
 - supabase/ migrations, seed, DB tests
-- tests/ Playwright end-to-end tests
+- e2e/ Playwright end-to-end tests (with axe)
+- tests/unit/ Vitest unit tests
+- docs/ security, architecture, accessibility, design QA, ADRs
 
 ## Commands
 
-pnpm dev · pnpm check (lint, typecheck, format check) · pnpm format
+pnpm dev · pnpm check (lint, style check, typecheck, format check, unit tests) · pnpm format
+
+pnpm test:e2e (Playwright against a production build; run pnpm seed after) · pnpm screenshots (refresh docs/screenshots)
 
 pnpm db:push (apply migrations to the hosted project) · pnpm db:types (regenerate lib/database.types.ts after a migration)
 

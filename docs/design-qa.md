@@ -1,3 +1,5 @@
+[README](../README.md) › [Docs](README.md) › Design QA
+
 # Design QA against Figma
 
 Every in-scope frame in the
@@ -44,3 +46,7 @@ Colors, type sizes, radii, and shadows come only from the theme tokens in
    online absence reporting, rescheduling.
 4. Pronouns are replaced with the child's name.
 5. "Find another center" points to Help.
+
+---
+
+‹ [Accessibility](accessibility.md) · Back to [Docs](README.md)
