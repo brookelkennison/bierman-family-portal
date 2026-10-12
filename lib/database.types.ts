@@ -457,6 +457,13 @@ export type Database = {
         Returns: string;
       };
       my_patient_ids: { Args: never; Returns: string[] };
+      provider_busy_times: {
+        Args: { p_from: string; p_provider_id: string; p_to: string };
+        Returns: {
+          ends_at: string;
+          starts_at: string;
+        }[];
+      };
     };
     Enums: {
       appointment_status: "scheduled" | "completed" | "cancelled";
