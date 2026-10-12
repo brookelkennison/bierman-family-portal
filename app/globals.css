@@ -12,12 +12,15 @@
 @theme {
   /* Brand */
   --color-navy: #004c97;
+  --color-navy-hover: #003a75;
   --color-navy-tint: #e5eef7;
   --color-aqua: #05c3de;
   --color-aqua-tint: #e6f9fc;
+  --color-aqua-light: #62d9ea;
   --color-aqua-text: #00788a;
   --color-pink: #ef4e72;
   --color-pink-button: #d63458;
+  --color-pink-button-hover: #b82a4b;
   --color-pink-tint: #fdecf0;
   --color-green: #61ce70;
   --color-green-tint: #eaf8ec;
@@ -32,10 +35,15 @@
   --color-line: #e3e8ee;
   --color-page: #f4f9fb;
   --color-gray-tint: #eef0f2;
+  --color-input-border: #c9d2db;
+  --color-placeholder: #8a9099;
 
   /* Status */
   --color-danger: #b42318;
   --color-danger-tint: #fdecea;
+  --color-danger-border: #f4b9b2;
+  --color-danger-text: #7a1a12;
+  --color-danger-hover: #8f1b12;
 
   /* Type */
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
@@ -53,6 +61,15 @@
   --text-body--line-height: 24px;
   --text-small: 13px;
   --text-small--line-height: 20px;
+  --text-label: 14px;
+  --text-label--line-height: 20px;
+  --text-label--font-weight: 600;
+  --text-button: 15px;
+  --text-button--line-height: 22px;
+  --text-button--font-weight: 700;
+  --text-button-lg: 16px;
+  --text-button-lg--line-height: 24px;
+  --text-button-lg--font-weight: 700;
   --text-tiny: 12px;
   --text-tiny--line-height: 16px;
 
@@ -60,6 +77,8 @@
   --radius-card: 24px;
   --radius-row: 20px;
   --radius-mark: 12px;
+  --radius-input: 14px;
+  --radius-banner: 16px;
 
   /* Depth */
   --shadow-tab: 0 1px 3px rgb(0 40 80 / 0.12);
@@ -71,6 +90,13 @@
 @layer base {
   body {
     @apply bg-page font-sans text-body text-ink antialiased;
+  }
+
+  /* Tailwind v4 resets buttons to the arrow cursor. Bring back the pointer
+     so buttons feel clickable on hover. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
   }
 
   /* One visible focus style everywhere (WCAG 2.4.7 and 2.4.11). */
