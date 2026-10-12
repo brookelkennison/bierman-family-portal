@@ -10,12 +10,14 @@
     "typecheck": "next typegen && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "pnpm lint && pnpm typecheck && pnpm format:check && pnpm test:unit",
+    "check": "pnpm lint && pnpm lint:styles && pnpm typecheck && pnpm format:check && pnpm test:unit",
+    "lint:styles": "node scripts/check-styles.mjs",
     "db:push": "supabase db push",
     "db:types": "supabase gen types typescript --linked > lib/database.types.ts",
     "test:db": "supabase test db",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
+    "screenshots": "SCREENSHOTS=1 playwright test e2e/screenshots.spec.ts",
     "seed": "node --env-file=.env.local --env-file=.env.seed --experimental-strip-types scripts/seed.ts"
   },
   "dependencies": {

@@ -88,7 +88,7 @@ export function AppointmentsView({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4 rounded-card border border-line bg-white p-4 md:flex-row md:items-center md:justify-between md:px-5">
+      <div className="flex flex-col gap-4 rounded-card border border-line bg-white p-3 sm:p-4 md:flex-row md:items-center md:justify-between md:px-5">
         {kids.length > 1 && (
           <div role="group" aria-label="Child" className="flex flex-wrap gap-2">
             <FilterChip
