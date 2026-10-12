@@ -29,7 +29,7 @@ export function Segmented<T extends string>({
             aria-pressed={active}
             onClick={() => onChange(option.value)}
             className={[
-              "rounded-full px-5 py-2.25 text-body transition-colors",
+              "rounded-full px-4 py-2.25 text-body transition-colors sm:px-5",
               active
                 ? "bg-white font-semibold text-navy shadow-tab"
                 : "font-medium text-muted hover:text-navy",
