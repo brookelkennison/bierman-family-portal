@@ -16,7 +16,7 @@ under Section 504, so AA is the floor, not a stretch goal.
 | Focus visible, never hidden under the sticky header (2.4.7, 2.4.11) | Tabs through the appointments page checking each stop                             | `e2e/layout.spec.ts`, CI                    |
 | Reduced motion                                                      | No animation or transition runs with the setting on                               | `e2e/layout.spec.ts`, CI                    |
 | Hard-coded colors and sizes                                         | Fails if a component skips the theme tokens                                       | `scripts/check-styles.mjs`, in `pnpm check` |
-| Screen reader                                                       | Manual VoiceOver pass with the script below                                       | Results below                               |
+| Screen reader                                                       | Manual VoiceOver pass with the script below                                       | Planned                                     |
 
 ## Per screen
 
@@ -81,27 +81,29 @@ under Section 504, so AA is the floor, not a stretch goal.
 - Real 404 status. Another family's appointment looks the same as one that
   doesn't exist.
 
-## Manual VoiceOver pass
+## Manual VoiceOver pass (planned)
+
+This is the script for a manual screen reader pass. It hasn't been run yet. The automated checks above cover labels, roles, and names on every page.
 
 Mac: Cmd+F5 turns VoiceOver on. Ctrl+Option+Right moves through the page.
 Tab moves between controls. Safari works best with VoiceOver.
 
-| #   | Do this                                | Expect to hear                                                      | Result  |
+| #   | Do this                                | Expect to hear                                                      | Status  |
 | --- | -------------------------------------- | ------------------------------------------------------------------- | ------- |
-| 1   | Log in with a wrong password           | "We couldn't log you in" read right away                            | Pending |
-| 2   | Log in, Tab once, press Enter          | Skip link, then main content                                        | Pending |
-| 3   | On the dashboard, press the Leo button | "Leo, selected" and "Showing Leo"                                   | Pending |
-| 4   | Next week arrows                       | New heading read, like "Leo's week of Oct 26"                       | Pending |
-| 5   | Book: pick Maya, then Taylor           | Radio group named, "Your BCBA" read with Taylor                     | Pending |
-| 6   | Arrow through the days                 | "Off" days read as off, open days by date                           | Pending |
-| 7   | Tab to a "Set by care team" pill       | Explanation read after the button name                              | Pending |
-| 8   | Book a visit                           | "You're booked" page announced                                      | Pending |
-| 9   | Appointments: switch to Cancelled      | Count announcement, then the empty message                          | Pending |
-| 10  | Detail: Tab to Reschedule, press it    | "Reschedule, Coming soon, dimmed", then the call-the-center message | Pending |
+| 1   | Log in with a wrong password           | "We couldn't log you in" read right away                            | Planned |
+| 2   | Log in, Tab once, press Enter          | Skip link, then main content                                        | Planned |
+| 3   | On the dashboard, press the Leo button | "Leo, selected" and "Showing Leo"                                   | Planned |
+| 4   | Next week arrows                       | New heading read, like "Leo's week of Oct 26"                       | Planned |
+| 5   | Book: pick Maya, then Taylor           | Radio group named, "Your BCBA" read with Taylor                     | Planned |
+| 6   | Arrow through the days                 | "Off" days read as off, open days by date                           | Planned |
+| 7   | Tab to a "Set by care team" pill       | Explanation read after the button name                              | Planned |
+| 8   | Book a visit                           | "You're booked" page announced                                      | Planned |
+| 9   | Appointments: switch to Cancelled      | Count announcement, then the empty message                          | Planned |
+| 10  | Detail: Tab to Reschedule, press it    | "Reschedule, Coming soon, dimmed", then the call-the-center message | Planned |
 
 ## Known gaps
 
-- The VoiceOver pass above is manual and not yet recorded.
+- The VoiceOver pass above is planned and not yet run.
 - No testing yet with NVDA or JAWS on Windows, or with TalkBack on Android.
 - axe runs the WCAG 2.1 rule set. Two 2.2 criteria are covered by our own
   tests instead: focus not obscured (2.4.11) in `layout.spec.ts`, and target
